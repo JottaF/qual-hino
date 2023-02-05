@@ -9,10 +9,10 @@ interface MusicProps {
 interface LetterContextType {
   letter: string;
   sendLetter: (letter: string) => void;
-  getMusics: () => MusicProps[];
   lettersHistoric: string[];
   fetchMusics: () => Promise<void>;
   isMusicLoading: boolean;
+  musics: MusicProps[];
 }
 
 interface LetterContextProps {
@@ -30,39 +30,33 @@ export function LetterProvider({ children }: LetterContextProps) {
   function sendLetter(letter: string) {
     setLetter((state) => letter);
     setLettersHistoric((state) => [...state, letter]);
+    setTimeout(() => setLetter((state) => ""), 1000);
   }
 
   async function fetchMusics() {
     const response = await api.get("musics");
-    console.log("fetch 2");
-    console.log(response.data);
 
-    setMusics((state) => [...response.data]);
     setIsMusicLoading(false);
-  }
 
-  function getMusics() {
     const musicsArray = [] as MusicProps[];
 
     for (let i = 0; i < 3; i++) {
       let count = 0;
       while (count < 400) {
-        let random = Math.floor(Math.random() * musics.length);
-        if (!musicsArray.includes(musics[random])) {
-          musicsArray.push(musics[random]);
+        let random = Math.floor(Math.random() * response.data.length);
+        if (!musicsArray.includes(response.data[random])) {
+          musicsArray.push(response.data[random]);
           break;
         }
         count++;
       }
     }
-    console.log("music");
 
-    return musicsArray;
+    setMusics((state) => [...musicsArray]);
   }
 
   useEffect(() => {
     fetchMusics();
-    console.log("fetch");
   }, []);
 
   return (
@@ -70,10 +64,10 @@ export function LetterProvider({ children }: LetterContextProps) {
       value={{
         letter,
         sendLetter,
-        getMusics,
         lettersHistoric,
         fetchMusics,
         isMusicLoading,
+        musics,
       }}
     >
       {children}

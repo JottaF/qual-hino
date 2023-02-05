@@ -4,14 +4,14 @@ import { LetterBox } from "../LetterBox";
 import { Music, MusicsContainer } from "./styles";
 
 export function MusicWidget() {
-  const { getMusics, isMusicLoading } = useContext(LetterContext);
-  const musics = getMusics();
+  const { musics, isMusicLoading } = useContext(LetterContext);
+  // const musics = getMusics();
 
   function createMusic(music: string) {
     const letters = [];
 
     for (let i = 0; i < music.length; i++) {
-      letters.push(<LetterBox letter={music[i]} />);
+      letters.push(<LetterBox content={music[i]} />);
     }
 
     return letters;

@@ -1,21 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LetterContext } from "../../../contexts/letterContext";
 import { LetterContainer } from "./styles";
 
 interface LetterBoxProps {
-  letter: string;
+  content: string;
   visibility?: boolean;
 }
 
-export function LetterBox({ letter, visibility = false }: LetterBoxProps) {
+export function LetterBox({ content, visibility = false }: LetterBoxProps) {
+  const { letter } = useContext(LetterContext);
   const [isVisible, setIsVisible] = useState(visibility);
 
-  //TODO remover função
-  function handleClick() {
-    setIsVisible(!isVisible);
+  if (letter === content) {
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
   }
+
   return (
-    <LetterContainer disabled={letter === " "} onClick={handleClick}>
-      {isVisible && <span>{letter}</span>}
+    <LetterContainer disabled={content === " "} isAlert={letter === content}>
+      {isVisible && <span>{content}</span>}
     </LetterContainer>
   );
 }

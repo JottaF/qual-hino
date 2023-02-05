@@ -18,7 +18,7 @@ export function InputLetter() {
   });
 
   function handleInputLetter(data: InputFormInputs) {
-    sendLetter(data.letter);
+    sendLetter(data.letter.toLowerCase());
     reset();
   }
 

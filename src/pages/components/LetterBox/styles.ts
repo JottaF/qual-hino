@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 interface LetterContainerProps {
   disabled: boolean;
+  isAlert?: boolean;
 }
 
 export const LetterContainer = styled.div<LetterContainerProps>`
@@ -24,5 +25,11 @@ export const LetterContainer = styled.div<LetterContainerProps>`
     props.disabled &&
     css`
       background-color: transparent;
+    `}
+
+  ${(props) =>
+    props.isAlert &&
+    css`
+      background-color: orange;
     `}
 `;
