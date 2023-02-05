@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { InputFormContainer } from "./styles";
+import { useContext } from "react";
+import { LetterContext } from "../../../contexts/letterContext";
 
 const InputLetterSchema = z.object({
   letter: z.string().max(1),
@@ -10,12 +12,13 @@ const InputLetterSchema = z.object({
 type InputFormInputs = z.infer<typeof InputLetterSchema>;
 
 export function InputLetter() {
+  const { sendLetter } = useContext(LetterContext);
   const { register, handleSubmit, reset } = useForm<InputFormInputs>({
     resolver: zodResolver(InputLetterSchema),
   });
 
   function handleInputLetter(data: InputFormInputs) {
-    console.log(data.letter);
+    sendLetter(data.letter);
     reset();
   }
 

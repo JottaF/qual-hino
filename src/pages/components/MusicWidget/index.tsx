@@ -4,7 +4,7 @@ import { LetterBox } from "../LetterBox";
 import { Music, MusicsContainer } from "./styles";
 
 export function MusicWidget() {
-  const { getMusics } = useContext(LetterContext);
+  const { getMusics, isMusicLoading } = useContext(LetterContext);
   const musics = getMusics();
 
   function createMusic(music: string) {
@@ -19,15 +19,16 @@ export function MusicWidget() {
 
   return (
     <MusicsContainer>
-      {musics.map((music) => {
-        return (
-          <Music key={music.id}>
-            {createMusic(music.name).map((letters) => {
-              return letters;
-            })}
-          </Music>
-        );
-      })}
+      {!isMusicLoading &&
+        musics.map((music) => {
+          return (
+            <Music key={music.id}>
+              {createMusic(music.name).map((letters) => {
+                return letters;
+              })}
+            </Music>
+          );
+        })}
     </MusicsContainer>
   );
 }

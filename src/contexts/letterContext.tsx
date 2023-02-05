@@ -11,6 +11,8 @@ interface LetterContextType {
   sendLetter: (letter: string) => void;
   getMusics: () => MusicProps[];
   lettersHistoric: string[];
+  fetchMusics: () => Promise<void>;
+  isMusicLoading: boolean;
 }
 
 interface LetterContextProps {
@@ -20,18 +22,23 @@ interface LetterContextProps {
 export const LetterContext = createContext({} as LetterContextType);
 
 export function LetterProvider({ children }: LetterContextProps) {
+  const [isMusicLoading, setIsMusicLoading] = useState(true);
   const [letter, setLetter] = useState("");
   const [musics, setMusics] = useState<MusicProps[]>([]);
   const [lettersHistoric, setLettersHistoric] = useState<string[]>([]);
 
   function sendLetter(letter: string) {
-    setLetter(letter);
+    setLetter((state) => letter);
     setLettersHistoric((state) => [...state, letter]);
   }
 
   async function fetchMusics() {
     const response = await api.get("musics");
-    setMusics(response.data);
+    console.log("fetch 2");
+    console.log(response.data);
+
+    setMusics((state) => [...response.data]);
+    setIsMusicLoading(false);
   }
 
   function getMusics() {
@@ -60,7 +67,14 @@ export function LetterProvider({ children }: LetterContextProps) {
 
   return (
     <LetterContext.Provider
-      value={{ letter, sendLetter, getMusics, lettersHistoric }}
+      value={{
+        letter,
+        sendLetter,
+        getMusics,
+        lettersHistoric,
+        fetchMusics,
+        isMusicLoading,
+      }}
     >
       {children}
     </LetterContext.Provider>
