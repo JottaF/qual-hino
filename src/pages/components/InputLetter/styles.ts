@@ -23,3 +23,5 @@ export const InputFormContainer = styled.form`
     }
   }
 `;
+
+InputFormContainer.displayName = "InputFormContainer";

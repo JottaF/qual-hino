@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { InputFormContainer } from "./styles";
-import { useContext } from "react";
+import { useContextSelector } from "use-context-selector";
 import { LetterContext } from "../../../contexts/letterContext";
 
 const InputLetterSchema = z.object({
@@ -12,19 +12,18 @@ const InputLetterSchema = z.object({
 type InputFormInputs = z.infer<typeof InputLetterSchema>;
 
 export function InputLetter() {
-  const { sendLetter, clearHits, totalLetters, lettersFound } =
-    useContext(LetterContext);
-
-  const finishedLettersInput = false; //totalLetters - 12 <= lettersFound;
-
-  console.log(totalLetters, lettersFound, totalLetters - 9 <= lettersFound);
+  const { sendLetter, finishedLettersInput } = useContextSelector(
+    LetterContext,
+    (context) => {
+      return context;
+    }
+  );
 
   const { register, handleSubmit, reset } = useForm<InputFormInputs>({
     resolver: zodResolver(InputLetterSchema),
   });
 
   function handleInputLetter(data: InputFormInputs) {
-    clearHits();
     sendLetter(data.letter.toLowerCase());
     reset();
   }

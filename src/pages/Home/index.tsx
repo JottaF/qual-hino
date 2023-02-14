@@ -1,11 +1,14 @@
-import { useContext } from "react";
+import { useContextSelector } from "use-context-selector";
 import { LetterContext } from "../../contexts/letterContext";
 import { MusicWidget } from "../components/MusicWidget";
 import { Panel } from "./components/Panel";
 import { AlertContainer, FooterContainer, HomeContainer } from "./styles";
 
 export function Home() {
-  const { showAlert, lettersHistoric } = useContext(LetterContext);
+  const { showAlert, lettersHistoric } = useContextSelector(
+    LetterContext,
+    (context) => context
+  );
 
   return (
     <HomeContainer>

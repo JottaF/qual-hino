@@ -44,3 +44,7 @@ export const AlertContainer = styled.div`
   border-radius: 20px;
   border: 10px solid ${(props) => props.theme.white};
 `;
+
+HomeContainer.displayName = "HomeContainer";
+FooterContainer.displayName = "FooterContainer";
+AlertContainer.displayName = "AlertContainer";

@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { useContextSelector } from "use-context-selector";
 import { LetterContext } from "../../../contexts/letterContext";
 import { LetterContainer } from "./styles";
 
@@ -7,8 +8,8 @@ interface LetterBoxProps {
 }
 
 export function LetterBox({ content }: LetterBoxProps) {
-  const { letter } = useContext(LetterContext);
   const [isVisible, setIsVisible] = useState(false);
+  const letter = useContextSelector(LetterContext, (context) => context.letter);
   const status =
     letter === content ||
     (letter === "c" && content === "ç") ||

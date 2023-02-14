@@ -14,3 +14,6 @@ export const Music = styled.div`
   justify-content: start;
   gap: 0.5rem;
 `;
+
+MusicsContainer.displayName = "MusicsContainer";
+Music.displayName = "Music";

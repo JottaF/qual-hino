@@ -82,3 +82,8 @@ export const MiddleContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
+PanelContainer.displayName = "PanelContainer";
+TeamsContainer.displayName = "TeamsContainer";
+Team.displayName = "Team";
+MiddleContainer.displayName = "MiddleContainer";

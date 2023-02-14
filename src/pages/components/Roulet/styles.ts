@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const Container = styled.div`
+export const RouletteContainer = styled.div`
   display: flex;
   align-items: center;
   max-width: 20rem;
@@ -31,3 +31,7 @@ export const Spin = styled.img`
   margin-left: -1.5rem;
   z-index: 2;
 `;
+
+RouletteContainer.displayName = "RouletteContainer";
+RouletteImg.displayName = "RouletteImg";
+Spin.displayName = "Spin";

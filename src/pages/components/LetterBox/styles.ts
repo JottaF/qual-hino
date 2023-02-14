@@ -44,3 +44,5 @@ export const LetterContainer = styled.div<LetterContainerProps>`
       }
     `}
 `;
+
+LetterContainer.displayName = "LetterContainer";

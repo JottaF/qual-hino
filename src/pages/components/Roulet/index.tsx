@@ -1,13 +1,18 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { useContextSelector } from "use-context-selector";
 import { LetterContext } from "../../../contexts/letterContext";
-import { Container, Spin, RouletteImg } from "./styles";
+import { RouletteContainer, Spin, RouletteImg } from "./styles";
 
 const imgRoulette = "../../../../src/assets/roulette.png";
 const imgSpin = "../../../../src/assets/Spin.png";
 
 export function Roulette() {
   const [rotate, setRotate] = useState(0);
-  const { sendRoulettePoint } = useContext(LetterContext);
+
+  const sendRoulettePoint = useContextSelector(
+    LetterContext,
+    (context) => context.sendRoulettePoint
+  );
 
   function handleRoulette() {
     const rotation = Math.random() * 5000 + 6000;
@@ -53,9 +58,9 @@ export function Roulette() {
     }
   }
   return (
-    <Container>
+    <RouletteContainer>
       <RouletteImg src={imgRoulette} rotate={rotate} onClick={handleRoulette} />
       <Spin src={imgSpin} />
-    </Container>
+    </RouletteContainer>
   );
 }

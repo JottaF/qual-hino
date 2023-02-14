@@ -1,12 +1,7 @@
-import {
-  createContext,
-  ReactNode,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
-import { number } from "zod";
+import { ReactNode, useEffect, useReducer, useState } from "react";
 import { api } from "../lib/axios";
+
+import { createContext } from "use-context-selector";
 
 export interface MusicProps {
   id: number;
@@ -43,6 +38,7 @@ interface LetterContextType {
   totalLetters: number;
   lettersFound: number;
   sendRoulettePoint: (point: number) => void;
+  finishedLettersInput: boolean;
 }
 
 interface LetterContextProps {
@@ -68,6 +64,8 @@ export function LetterProvider({ children }: LetterContextProps) {
   const [totalLetters, setTotalLetters] = useState(0);
   const [lettersFound, setLettersFound] = useState(0);
   const [roulettePoints, setRoulettePoints] = useState(0);
+
+  const finishedLettersInput = totalLetters - 12 <= lettersFound; // !: trocar
 
   function reducer(state: any, action: ActionProps) {
     console.log("reduce");
@@ -117,6 +115,7 @@ export function LetterProvider({ children }: LetterContextProps) {
     if (!isLetterUsed && userLetter !== "") {
       setLetter((state) => userLetter);
       setLettersHistoric((state) => [...state, userLetter]);
+      clearHits();
       calcHits(userLetter);
       setTimeout(() => setLetter((state) => ""), 1000);
     } else {
@@ -167,7 +166,23 @@ export function LetterProvider({ children }: LetterContextProps) {
     console.log("calcHits");
     const hitsCount = musics.reduce((acc, music) => {
       for (let msc of music.name) {
-        if (msc.toLocaleLowerCase() === userLetter) {
+        let mscLower = msc.toLocaleLowerCase();
+        console.log(mscLower, userLetter);
+        if (
+          mscLower === userLetter ||
+          (userLetter === "c" && mscLower === "ç") ||
+          (userLetter === "a" && mscLower === "á") ||
+          (userLetter === "a" && mscLower === "à") ||
+          (userLetter === "a" && mscLower === "ã") ||
+          (userLetter === "a" && mscLower === "â") ||
+          (userLetter === "e" && mscLower === "é") ||
+          (userLetter === "e" && mscLower === "ê") ||
+          (userLetter === "i" && mscLower === "í") ||
+          (userLetter === "o" && mscLower === "ô") ||
+          (userLetter === "o" && mscLower === "õ") ||
+          (userLetter === "o" && mscLower === "ó") ||
+          (userLetter === "u" && mscLower === "ú")
+        ) {
           acc++;
           setLettersFound((state) => state + 1);
         }
@@ -273,6 +288,7 @@ export function LetterProvider({ children }: LetterContextProps) {
         totalLetters,
         lettersFound,
         sendRoulettePoint,
+        finishedLettersInput,
       }}
     >
       {children}

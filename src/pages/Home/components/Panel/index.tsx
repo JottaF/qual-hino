@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContextSelector } from "use-context-selector";
 import { LetterContext } from "../../../../contexts/letterContext";
 import { InputLetter } from "../../../components/InputLetter";
 import { Roulette } from "../../../components/Roulet";
@@ -10,7 +10,10 @@ import {
 } from "./styles";
 
 export function Panel() {
-  const { teamsPoints, currentTeam } = useContext(LetterContext);
+  const { teamsPoints, currentTeam } = useContextSelector(
+    LetterContext,
+    (context) => context
+  );
 
   return (
     <PanelContainer>
