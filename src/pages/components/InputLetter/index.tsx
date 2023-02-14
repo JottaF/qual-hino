@@ -12,22 +12,32 @@ const InputLetterSchema = z.object({
 type InputFormInputs = z.infer<typeof InputLetterSchema>;
 
 export function InputLetter() {
-  const { sendLetter } = useContext(LetterContext);
+  const { sendLetter, clearHits, totalLetters, lettersFound } =
+    useContext(LetterContext);
+
+  const finishedLettersInput = false; //totalLetters - 12 <= lettersFound;
+
+  console.log(totalLetters, lettersFound, totalLetters - 9 <= lettersFound);
+
   const { register, handleSubmit, reset } = useForm<InputFormInputs>({
     resolver: zodResolver(InputLetterSchema),
   });
 
   function handleInputLetter(data: InputFormInputs) {
+    clearHits();
     sendLetter(data.letter.toLowerCase());
     reset();
   }
 
   return (
     <InputFormContainer onSubmit={handleSubmit(handleInputLetter)}>
+      {/* todo: quando desabilitar o input, mudar-lo visualmente, incluindo o formato */}
       <input
         type="text"
         {...register("letter")}
         placeholder="Digite uma letra"
+        autoComplete="off"
+        disabled={finishedLettersInput}
       />
     </InputFormContainer>
   );

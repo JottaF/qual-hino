@@ -9,6 +9,8 @@ export const defaultTheme = {
   team4: "#FFCA3A",
 
   "yellow-300": "#E9D8A6",
+  orange: "#ffa500",
+  red: "#ff0000",
 
   white: "#fff",
 } as const;

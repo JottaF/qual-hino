@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 interface LetterContainerProps {
   disabled: boolean;
   isAlert?: boolean;
+  isSpecialCharacter: boolean;
 }
 
 export const LetterContainer = styled.div<LetterContainerProps>`
@@ -31,5 +32,15 @@ export const LetterContainer = styled.div<LetterContainerProps>`
     props.isAlert &&
     css`
       background-color: orange;
+    `}
+
+  ${(props) =>
+    props.isSpecialCharacter &&
+    css`
+      background-color: transparent;
+      border: 3px solid ${props.theme["yellow-300"]};
+      span {
+        color: ${props.theme["yellow-300"]};
+      }
     `}
 `;

@@ -4,22 +4,48 @@ import { LetterContainer } from "./styles";
 
 interface LetterBoxProps {
   content: string;
-  visibility?: boolean;
 }
 
-export function LetterBox({ content, visibility = false }: LetterBoxProps) {
+export function LetterBox({ content }: LetterBoxProps) {
   const { letter } = useContext(LetterContext);
-  const [isVisible, setIsVisible] = useState(visibility);
+  const [isVisible, setIsVisible] = useState(false);
+  const status =
+    letter === content ||
+    (letter === "c" && content === "ç") ||
+    (letter === "a" && content === "á") ||
+    (letter === "a" && content === "à") ||
+    (letter === "a" && content === "ã") ||
+    (letter === "a" && content === "â") ||
+    (letter === "e" && content === "é") ||
+    (letter === "e" && content === "ê") ||
+    (letter === "i" && content === "í") ||
+    (letter === "o" && content === "ô") ||
+    (letter === "o" && content === "õ") ||
+    (letter === "o" && content === "ó") ||
+    (letter === "u" && content === "ú");
 
-  if (letter === content) {
+  if (status) {
     setTimeout(() => {
       setIsVisible(true);
     }, 1000);
   }
 
+  const specialCharacter =
+    content === "-" ||
+    content === "?" ||
+    content === "!" ||
+    content === "," ||
+    content === "'" ||
+    content === ".";
+
   return (
-    <LetterContainer disabled={content === " "} isAlert={letter === content}>
+    <LetterContainer
+      disabled={content === " "}
+      isAlert={status}
+      isSpecialCharacter={specialCharacter}
+    >
       {isVisible && <span>{content}</span>}
+      {specialCharacter && <span>{content}</span>}
     </LetterContainer>
   );
 }
