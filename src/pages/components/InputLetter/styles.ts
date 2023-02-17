@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 export const InputFormContainer = styled.form`
+  display: flex;
+  gap: 1rem;
+
   input {
     background-color: transparent;
     border: none;
@@ -20,6 +23,26 @@ export const InputFormContainer = styled.form`
 
     :focus {
       outline: none;
+    }
+  }
+
+  button {
+    width: 12rem;
+    height: 4rem;
+    border: 0;
+    background: ${(props) => props.theme["blue-500"]};
+    color: ${(props) => props.theme["blue-800"]};
+    font-size: 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      filter: brightness(1.2);
+      transition: filter 0.2s ease-in;
+    }
+
+    &:focus {
+      outline: 0;
     }
   }
 `;

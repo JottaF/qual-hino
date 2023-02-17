@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const HomeContainer = styled.main`
   display: flex;
@@ -25,13 +25,17 @@ export const FooterContainer = styled.footer`
   padding: 0 1rem;
 `;
 
-export const AlertContainer = styled.div`
+interface AlertContainerProps {
+  variant?: string;
+}
+export const AlertContainer = styled.div<AlertContainerProps>`
   width: 100%;
   max-width: 1000px;
   height: 20rem;
   background-color: ${(props) => props.theme.red};
   color: ${(props) => props.theme.white};
   font-size: 3rem;
+  z-index: 6;
 
   position: absolute;
   top: calc((100% - 20rem) / 2);
@@ -43,6 +47,12 @@ export const AlertContainer = styled.div`
   flex-direction: column;
   border-radius: 20px;
   border: 10px solid ${(props) => props.theme.white};
+
+  ${(props) =>
+    props.variant === "point" &&
+    css`
+      background-color: ${props.theme["blue-700"]};
+    `}
 `;
 
 HomeContainer.displayName = "HomeContainer";

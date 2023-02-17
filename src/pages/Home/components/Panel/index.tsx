@@ -10,7 +10,7 @@ import {
 } from "./styles";
 
 export function Panel() {
-  const { teamsPoints, currentTeam } = useContextSelector(
+  const { teamsPoints, currentTeam, changeCurrentTeam } = useContextSelector(
     LetterContext,
     (context) => context
   );
@@ -18,10 +18,22 @@ export function Panel() {
   return (
     <PanelContainer>
       <TeamsContainer>
-        <Team team={1} active={currentTeam === 1}>
+        <Team
+          team={1}
+          active={currentTeam === 1}
+          onClick={() => {
+            changeCurrentTeam(1);
+          }}
+        >
           {teamsPoints.team1}
         </Team>
-        <Team team={2} active={currentTeam === 2}>
+        <Team
+          team={2}
+          active={currentTeam === 2}
+          onClick={() => {
+            changeCurrentTeam(2);
+          }}
+        >
           {teamsPoints.team2}
         </Team>
       </TeamsContainer>
@@ -30,10 +42,22 @@ export function Panel() {
         <InputLetter />
       </MiddleContainer>
       <TeamsContainer side="right">
-        <Team team={3} active={currentTeam === 3}>
+        <Team
+          team={3}
+          active={currentTeam === 3}
+          onClick={() => {
+            changeCurrentTeam(3);
+          }}
+        >
           {teamsPoints.team3}
         </Team>
-        <Team team={4} active={currentTeam === 4}>
+        <Team
+          team={4}
+          active={currentTeam === 4}
+          onClick={() => {
+            changeCurrentTeam(4);
+          }}
+        >
           {teamsPoints.team4}
         </Team>
       </TeamsContainer>

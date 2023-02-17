@@ -9,7 +9,10 @@ interface LetterBoxProps {
 
 export function LetterBox({ content }: LetterBoxProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const letter = useContextSelector(LetterContext, (context) => context.letter);
+  const { letter, showAllLetters } = useContextSelector(
+    LetterContext,
+    (context) => context
+  );
   const status =
     letter === content ||
     (letter === "c" && content === "ç") ||
@@ -45,7 +48,9 @@ export function LetterBox({ content }: LetterBoxProps) {
       isAlert={status}
       isSpecialCharacter={specialCharacter}
     >
-      {isVisible && <span>{content}</span>}
+      {(isVisible || showAllLetters) && !specialCharacter && (
+        <span>{content}</span>
+      )}
       {specialCharacter && <span>{content}</span>}
     </LetterContainer>
   );

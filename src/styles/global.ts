@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     body, input, button, textarea {
-        font-family: 'Baloo 2';
+        font-family: 'Baloo 2',sans-serif;
         font-weight: bold;
         font-size: 1rem;
     }

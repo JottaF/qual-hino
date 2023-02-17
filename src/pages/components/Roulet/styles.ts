@@ -3,12 +3,9 @@ import styled, { css } from "styled-components";
 export const RouletteContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   max-width: 20rem;
   max-height: 20rem;
-
-  /* @media() { dimensionar depois
-    
-  } */
 `;
 
 interface RouletteImgProps {
@@ -17,7 +14,8 @@ interface RouletteImgProps {
 
 export const RouletteImg = styled.img<RouletteImgProps>`
   width: 100%;
-  transition: 3s ease-in-out;
+
+  transition: rotate 3s cubic-bezier(0.075, 0.82, 0.165, 1);
 
   ${(props) =>
     props.rotate > 0 &&

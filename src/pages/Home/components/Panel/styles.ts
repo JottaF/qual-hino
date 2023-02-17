@@ -39,10 +39,16 @@ export const Team = styled.div<TeamProps>`
   border-bottom-right-radius: 8px;
   font-size: 3rem;
   color: ${(props) => props.theme.white};
+  cursor: pointer;
+  transition: filter 0.2s ease;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
 
   ${(props) =>
     props.team === 1 &&

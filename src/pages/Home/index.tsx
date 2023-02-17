@@ -31,7 +31,7 @@ export function Home() {
       </FooterContainer>
 
       {showAlert.active && (
-        <AlertContainer>
+        <AlertContainer variant={showAlert.variant}>
           <h1>{showAlert.title}</h1>
           <span>{showAlert.message}</span>
         </AlertContainer>

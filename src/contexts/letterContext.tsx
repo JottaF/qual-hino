@@ -16,6 +16,7 @@ interface TeamsPointsProps {
 }
 interface ShowAlertProps {
   active: boolean;
+  variant?: "point";
   title?: string;
   message?: string;
 }
@@ -34,11 +35,16 @@ interface LetterContextType {
   showAlert: ShowAlertProps;
   teamsPoints: TeamsPointsProps;
   currentTeam: number;
-  changeCurrentTeam: () => void;
+  changeCurrentTeam: (team?: number) => void;
   totalLetters: number;
   lettersFound: number;
   sendRoulettePoint: (point: number) => void;
   finishedLettersInput: boolean;
+  roulettePoints: number;
+  rotate: number;
+  handleRoulette: () => void;
+  showAllLetters: boolean;
+  showLetters: () => void;
 }
 
 interface LetterContextProps {
@@ -64,20 +70,30 @@ export function LetterProvider({ children }: LetterContextProps) {
   const [totalLetters, setTotalLetters] = useState(0);
   const [lettersFound, setLettersFound] = useState(0);
   const [roulettePoints, setRoulettePoints] = useState(0);
+  const [rotate, setRotate] = useState(0);
+  const [showAllLetters, setShowAllLetters] = useState(false);
 
   const finishedLettersInput = totalLetters - 12 <= lettersFound; // !: trocar
 
   function reducer(state: any, action: ActionProps) {
     console.log("reduce");
     switch (action.type) {
-      case "TEAM1":
+      case "INCREMENT_TEAM1":
         return { ...state, team1: (state.team1 += action.hit) };
-      case "TEAM2":
+      case "INCREMENT_TEAM2":
         return { ...state, team2: (state.team2 += action.hit) };
-      case "TEAM3":
+      case "INCREMENT_TEAM3":
         return { ...state, team3: (state.team3 += action.hit) };
-      case "TEAM4":
+      case "INCREMENT_TEAM4":
         return { ...state, team4: (state.team4 += action.hit) };
+      case "RESET_1":
+        return { ...state, team1: (state.team1 = 0) };
+      case "RESET_2":
+        return { ...state, team2: (state.team2 = 0) };
+      case "RESET_3":
+        return { ...state, team3: (state.team3 = 0) };
+      case "RESET_4":
+        return { ...state, team4: (state.team4 = 0) };
       default:
         return state;
     }
@@ -94,16 +110,33 @@ export function LetterProvider({ children }: LetterContextProps) {
     console.log("incrementTeam");
     switch (team) {
       case 1:
-        teamsPointsDispatch({ type: "TEAM1", hit });
+        teamsPointsDispatch({ type: "INCREMENT_TEAM1", hit });
         break;
       case 2:
-        teamsPointsDispatch({ type: "TEAM2", hit });
+        teamsPointsDispatch({ type: "INCREMENT_TEAM2", hit });
         break;
       case 3:
-        teamsPointsDispatch({ type: "TEAM3", hit });
+        teamsPointsDispatch({ type: "INCREMENT_TEAM3", hit });
         break;
       case 4:
-        teamsPointsDispatch({ type: "TEAM4", hit });
+        teamsPointsDispatch({ type: "INCREMENT_TEAM4", hit });
+        break;
+    }
+  }
+
+  function resetTeamPoints(team: number) {
+    switch (team) {
+      case 1:
+        teamsPointsDispatch({ type: "RESET_1", hit: 0 });
+        break;
+      case 2:
+        teamsPointsDispatch({ type: "RESET_2", hit: 0 });
+        break;
+      case 3:
+        teamsPointsDispatch({ type: "RESET_3", hit: 0 });
+        break;
+      case 4:
+        teamsPointsDispatch({ type: "RESET_4", hit: 0 });
         break;
     }
   }
@@ -127,6 +160,7 @@ export function LetterProvider({ children }: LetterContextProps) {
       setTimeout(() => {
         setShowAlert((state) => ({ active: false }));
         changeCurrentTeam();
+        setRoulettePoints(0);
       }, 2000);
     }
   }
@@ -167,7 +201,6 @@ export function LetterProvider({ children }: LetterContextProps) {
     const hitsCount = musics.reduce((acc, music) => {
       for (let msc of music.name) {
         let mscLower = msc.toLocaleLowerCase();
-        console.log(mscLower, userLetter);
         if (
           mscLower === userLetter ||
           (userLetter === "c" && mscLower === "ç") ||
@@ -200,12 +233,15 @@ export function LetterProvider({ children }: LetterContextProps) {
       }));
       setTimeout(() => {
         setShowAlert((state) => ({ active: false }));
+        incrementTeam(currentTeam, 0);
         changeCurrentTeam();
       }, 2000);
     } else if (hitsCount > 0) {
-      incrementTeam(currentTeam, hitsCount * roulettePoints);
-      setRoulettePoints((state) => 0);
+      setTimeout(() => {
+        incrementTeam(currentTeam, hitsCount * roulettePoints);
+      }, 2000);
     }
+    setRoulettePoints((state) => 0);
   }
 
   function clearHits() {
@@ -226,9 +262,11 @@ export function LetterProvider({ children }: LetterContextProps) {
     return isLetterInHistoric;
   }
 
-  function changeCurrentTeam() {
+  function changeCurrentTeam(team?: number) {
     console.log("changeCurrentTeam");
-    if (currentTeam < 4) {
+    if (team) {
+      setCurrentTeam((state) => team);
+    } else if (currentTeam < 4) {
       setCurrentTeam((state) => state + 1);
     } else {
       setCurrentTeam((state) => 1);
@@ -237,32 +275,89 @@ export function LetterProvider({ children }: LetterContextProps) {
 
   function sendRoulettePoint(point: number) {
     console.log("sendRoulettePoint", point);
-    if (point === 0) {
-      // incrementTeam(currentTeam, 0);
-      // setTimeout(() => {
-      //   setShowAlert((state) => ({
-      //     active: true,
-      //     title: "Perdeu tudo",
-      //   }));
-      // }, 3500);
-      // setTimeout(() => {
-      //   setShowAlert((state) => ({ active: false }));
-      //   changeCurrentTeam();
-      // }, 2000);
-    } else if (point === 1) {
-      // setTimeout(() => {
-      //   setShowAlert((state) => ({
-      //     active: true,
-      //     title: "Passou a vez",
-      //   }));
-      // }, 3500);
-      // setTimeout(() => {
-      //   setShowAlert((state) => ({ active: false }));
-      //   changeCurrentTeam();
-      // }, 2000);
+
+    setTimeout(() => {
+      if (point === 0) {
+        setShowAlert((state) => ({
+          active: true,
+          title: "Perdeu tudo",
+        }));
+        resetTeamPoints(currentTeam);
+        changeCurrentTeam();
+      } else if (point === 1) {
+        setShowAlert((state) => ({
+          active: true,
+          title: "Passou a vez",
+        }));
+        changeCurrentTeam();
+      } else if (point > 1) {
+        setShowAlert((state) => ({
+          active: true,
+          variant: "point",
+          title: `${point} pontos`,
+        }));
+        setRoulettePoints(point);
+      }
+    }, 3900);
+
+    setTimeout(() => {
+      setShowAlert((state) => ({ active: false }));
+    }, 5200);
+
+    if (finishedLettersInput) changeCurrentTeam();
+  }
+
+  function handleRoulette() {
+    const rotation = Math.random() * 5000 + 9000;
+
+    if (Math.abs(rotate - rotation) < 9000) {
+      setRotate((state) => rotation + 9000);
     } else {
-      setRoulettePoints(point);
+      setRotate((state) => rotation);
     }
+
+    const deg = rotation % 360;
+    if (deg >= 0 && deg < 20) {
+      sendRoulettePoint(200);
+    } else if (deg >= 20 && deg < 40) {
+      sendRoulettePoint(100);
+    } else if (deg >= 40 && deg < 60) {
+      sendRoulettePoint(350);
+    } else if (deg >= 60 && deg < 80) {
+      sendRoulettePoint(1);
+    } else if (deg >= 80 && deg < 100) {
+      sendRoulettePoint(800);
+    } else if (deg >= 100 && deg < 120) {
+      sendRoulettePoint(75);
+    } else if (deg >= 120 && deg < 140) {
+      sendRoulettePoint(900);
+    } else if (deg >= 140 && deg < 160) {
+      sendRoulettePoint(1);
+    } else if (deg >= 160 && deg < 180) {
+      sendRoulettePoint(100);
+    } else if (deg >= 180 && deg < 200) {
+      sendRoulettePoint(750);
+    } else if (deg >= 200 && deg < 220) {
+      sendRoulettePoint(50);
+    } else if (deg >= 220 && deg < 240) {
+      sendRoulettePoint(1);
+    } else if (deg >= 240 && deg < 260) {
+      sendRoulettePoint(150);
+    } else if (deg >= 260 && deg < 280) {
+      sendRoulettePoint(600);
+    } else if (deg >= 280 && deg < 300) {
+      sendRoulettePoint(250);
+    } else if (deg >= 300 && deg < 320) {
+      sendRoulettePoint(0);
+    } else if (deg >= 320 && deg < 340) {
+      sendRoulettePoint(1000);
+    } else if (deg >= 340 && deg < 360) {
+      sendRoulettePoint(1);
+    }
+  }
+
+  function showLetters() {
+    setShowAllLetters(true);
   }
 
   useEffect(() => {
@@ -289,6 +384,11 @@ export function LetterProvider({ children }: LetterContextProps) {
         lettersFound,
         sendRoulettePoint,
         finishedLettersInput,
+        roulettePoints,
+        rotate,
+        handleRoulette,
+        showAllLetters,
+        showLetters,
       }}
     >
       {children}
