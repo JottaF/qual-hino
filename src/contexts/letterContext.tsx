@@ -73,7 +73,7 @@ export function LetterProvider({ children }: LetterContextProps) {
   const [rotate, setRotate] = useState(0);
   const [showAllLetters, setShowAllLetters] = useState(false);
 
-  const finishedLettersInput = totalLetters - 12 <= lettersFound; // !: trocar
+  const finishedLettersInput = totalLetters - 12 <= lettersFound;
 
   function reducer(state: any, action: ActionProps) {
     console.log("reduce");
@@ -191,6 +191,10 @@ export function LetterProvider({ children }: LetterContextProps) {
     setMusics((state) => [...musicsArray]);
 
     let musicsLettersCount = musicsArray.reduce((acc, music) => {
+      const regex = /[-?!,'´`\.]/g;
+      const quantitySpecialCharacters = (music.name.match(regex) || []).length;
+      setLettersFound((state) => state + quantitySpecialCharacters);
+
       return (acc += music.name.replaceAll(" ", "").length);
     }, 0);
     setTotalLetters(musicsLettersCount);
@@ -308,13 +312,13 @@ export function LetterProvider({ children }: LetterContextProps) {
   }
 
   function handleRoulette() {
-    const rotation = Math.random() * 5000 + 9000;
+    let rotation = Math.random() * 5000 + 9000;
 
     if (Math.abs(rotate - rotation) < 9000) {
-      setRotate((state) => rotation + 9000);
-    } else {
-      setRotate((state) => rotation);
+      rotation += Math.random() * 9000;
     }
+
+    setRotate((state) => rotation);
 
     const deg = rotation % 360;
     if (deg >= 0 && deg < 20) {

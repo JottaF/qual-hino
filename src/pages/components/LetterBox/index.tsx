@@ -13,20 +13,9 @@ export function LetterBox({ content }: LetterBoxProps) {
     LetterContext,
     (context) => context
   );
-  const status =
-    letter === content ||
-    (letter === "c" && content === "ç") ||
-    (letter === "a" && content === "á") ||
-    (letter === "a" && content === "à") ||
-    (letter === "a" && content === "ã") ||
-    (letter === "a" && content === "â") ||
-    (letter === "e" && content === "é") ||
-    (letter === "e" && content === "ê") ||
-    (letter === "i" && content === "í") ||
-    (letter === "o" && content === "ô") ||
-    (letter === "o" && content === "õ") ||
-    (letter === "o" && content === "ó") ||
-    (letter === "u" && content === "ú");
+
+  const regex = /^(a[aàáãâ]|c[cç]|e[eéê]|i[ií]|o[oóôõ]|u[uú])$/;
+  const status = regex.test(letter + content);
 
   if (status) {
     setTimeout(() => {
@@ -34,13 +23,7 @@ export function LetterBox({ content }: LetterBoxProps) {
     }, 1000);
   }
 
-  const specialCharacter =
-    content === "-" ||
-    content === "?" ||
-    content === "!" ||
-    content === "," ||
-    content === "'" ||
-    content === ".";
+  const specialCharacter = (content.match(/[-?!,'´`\.]/g) || [])?.length > 0;
 
   return (
     <LetterContainer
