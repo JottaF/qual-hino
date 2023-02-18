@@ -50,7 +50,7 @@ export function InputLetter() {
         />
       )}
 
-      {finishedLettersInput && (
+      {true && (
         <button type="button" onClick={showAllLetters}>
           Revelar
         </button>

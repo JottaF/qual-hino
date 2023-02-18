@@ -362,6 +362,7 @@ export function LetterProvider({ children }: LetterContextProps) {
 
   function showLetters() {
     setShowAllLetters(true);
+    incrementTeam(currentTeam, roulettePoints * (totalLetters - lettersFound));
   }
 
   useEffect(() => {

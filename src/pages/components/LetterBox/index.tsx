@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useContextSelector } from "use-context-selector";
 import { LetterContext } from "../../../contexts/letterContext";
 import { LetterContainer } from "./styles";
@@ -14,26 +14,47 @@ export function LetterBox({ content }: LetterBoxProps) {
     (context) => context
   );
 
-  const regex = /^(a[aàáãâ]|c[cç]|e[eéê]|i[ií]|o[oóôõ]|u[uú])$/;
-  const status = regex.test(letter + content);
+  const regex = /^(a[aàáãâ]|c[cç]|e[eéê]|i[ií]|o[oóòôõ]|u[uú])$/;
+  const status = regex.test(letter + content) || letter === content;
+  const [alert, setAlert] = useState(false);
 
-  if (status) {
-    setTimeout(() => {
-      setIsVisible(true);
-    }, 1000);
-  }
+  const specialCharacter =
+    (content.match(/[-?!,'`"`\.]/g) || [])?.length > 0 || content === "´";
 
-  const specialCharacter = (content.match(/[-?!,'´`\.]/g) || [])?.length > 0;
+  useEffect(() => {
+    if (status) {
+      console.log(1);
+
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+        setIsVisible(true);
+      }, 1000);
+    }
+
+    if (!isVisible && !specialCharacter && content !== " " && showAllLetters) {
+      console.log(2);
+
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+        setIsVisible(true);
+      }, 1000);
+    }
+  }, [status, showAllLetters]);
+
+  // function handleShowLetter() {
+  //   setIsVisible(!isVisible);
+  // }
 
   return (
     <LetterContainer
       disabled={content === " "}
-      isAlert={status}
+      isAlert={alert}
       isSpecialCharacter={specialCharacter}
+      // onClick={handleShowLetter}
     >
-      {(isVisible || showAllLetters) && !specialCharacter && (
-        <span>{content}</span>
-      )}
+      {isVisible && !specialCharacter && <span>{content}</span>}
       {specialCharacter && <span>{content}</span>}
     </LetterContainer>
   );
